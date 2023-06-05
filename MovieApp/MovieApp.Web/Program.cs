@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using MovieApp.Infastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfastructureServices(configuration);
+
+builder.Services.AddFluentValidationAutoValidation();
 
 var app = builder.Build();
 
