@@ -4,9 +4,9 @@ namespace MovieApp.Core.Interfaces;
 
 public interface IMovieRepository
 {
-   Task<Movie?> GetByIdAsync(int id);
-   Task<IList<Movie>> GetAllAsync();    
-   Task AddAsync(Movie movie);
+   Task<Movie?> GetByIdAsync(int id,CancellationToken token);
+   Task<IList<Movie>> GetAllAsync(CancellationToken token);    
+   Task AddAsync(Movie movie,CancellationToken token);
    Task UpdateAsync(Movie movie);
-   Task DeleteAsync(int Id);
+   Task DeleteAsync(int Id,CancellationToken token);
 }

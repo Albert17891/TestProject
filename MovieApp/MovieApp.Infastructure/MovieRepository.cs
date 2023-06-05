@@ -14,30 +14,35 @@ public class MovieRepository : IMovieRepository
         _context = context;
     }
 
-    public async Task AddAsync(Movie movie)
+    public async Task AddAsync(Movie movie,CancellationToken token)
     {
-        await _context.AddAsync(movie);
+        await _context.AddAsync(movie,token);
 
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int Id)
+    public async Task DeleteAsync(int Id,CancellationToken token)
     {
-        var movie = await GetByIdAsync(Id);
+        var movie = await GetByIdAsync(Id,token);
+
+        if(movie == null)
+        {
+            throw new NullReferenceException(nameof(movie));
+        }
 
         _context.Remove(movie);
 
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IList<Movie>> GetAllAsync()
+    public async Task<IList<Movie>> GetAllAsync(CancellationToken token)
     {
-        return await _context.Movies.ToListAsync();
+        return await _context.Movies.ToListAsync(token);
     }
 
-    public async Task<Movie?> GetByIdAsync(int id)
+    public async Task<Movie?> GetByIdAsync(int id,CancellationToken token)
     {
-        return await _context.Movies.FirstOrDefaultAsync(x => x.Id == id);
+        return await _context.Movies.FirstOrDefaultAsync(x => x.Id == id,token);
     }
 
     public async Task UpdateAsync(Movie movie)
