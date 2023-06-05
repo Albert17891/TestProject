@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using MovieApp.Infastructure;
+using MovieApp.Web.Infastructure.Middlewares;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalExceptionHandlers>();   
 
 app.MapControllers();
 
