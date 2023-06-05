@@ -1,9 +1,16 @@
 using FluentValidation.AspNetCore;
 using MovieApp.Infastructure;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
+
+Log.Logger = new LoggerConfiguration()
+           .ReadFrom.Configuration(configuration)
+           .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 
