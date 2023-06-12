@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace MovieApp.Web.Models.Request.NewFolder.Validation;
+namespace MovieApp.Web.Models.Request.Validation;
 
 public class MovieUptadeRequestValidation:AbstractValidator<MovieUpdateRequest>
 {
