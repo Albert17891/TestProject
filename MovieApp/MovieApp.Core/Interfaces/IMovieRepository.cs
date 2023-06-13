@@ -1,4 +1,4 @@
-﻿using MovieApp.Core.Entities;
+﻿using MovieApp.Core.Entities.MovieModels;
 
 namespace MovieApp.Core.Interfaces;
 
