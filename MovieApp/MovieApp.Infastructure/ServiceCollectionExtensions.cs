@@ -12,7 +12,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-        services.AddScoped<IMovieRepository, MovieRepository>();    
+        services.AddScoped<IMovieRepository, BaseRepository>();    
 
         return services;
     }
