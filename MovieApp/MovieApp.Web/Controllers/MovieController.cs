@@ -1,31 +1,24 @@
-﻿using Mapster;
-using Microsoft.AspNetCore.Mvc;
-using MovieApp.Core.Entities;
-using MovieApp.Core.Interfaces;
-using MovieApp.Web.Models.Request;
+﻿using Microsoft.AspNetCore.Mvc;
+using MovieApp.Core.Entities.Movie;
+using MovieApp.Core.Interfaces.Services;
 
 namespace MovieApp.Web.Controllers;
 [Route("[controller]")]
 [ApiController]
 public class MovieController : ControllerBase
 {
-    private readonly IMovieRepository _repository;
+    private readonly IMovieService _service;
 
-    public MovieController(IMovieRepository repository)
+    public MovieController(IMovieService service)
     {
-        _repository = repository;
+        _service = service;
     }
 
-    [Route("get-by-id")]
+    [Route("id{id}")]
     [HttpGet]
-    public async Task<IActionResult> GetMovieById(int id, CancellationToken token = default)
+    public async Task<IActionResult> GetMovieById([FromRoute] int id, CancellationToken token = default)
     {
-        if (id == 0)
-        {
-            return BadRequest();
-        }
-
-        var movie =await _repository.GetByIdAsync(id, token);
+        var movie = await _service.GetMovieByIdAsync(id, token);
 
         return Ok(movie);
     }
@@ -33,51 +26,35 @@ public class MovieController : ControllerBase
     [Route("get-all")]
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken token = default)
-    {      
-
-        var movies = await _repository.GetAllAsync(token);
+    {
+        var movies = await _service.GetAllMovieAsync(token);
 
         return Ok(movies);
     }
 
     [Route("add-movie")]
     [HttpPost]
-    public async Task<IActionResult> AddMovie(MovieRequest movie,CancellationToken token)
+    public async Task<IActionResult> AddMovie([FromBody] MovieRequest movie, CancellationToken token)
     {
-        if (movie == null)
-        {
-            return BadRequest();
-        }
-
-        await _repository.AddAsync(movie.Adapt<Movie>(), token);
+        await _service.AddMovieAsync(movie, token);
 
         return Ok();
     }
 
     [Route("update-movie")]
     [HttpPut]
-    public async Task<IActionResult> UpdateMovie(MovieUpdateRequest movie)
+    public async Task<IActionResult> UpdateMovie([FromBody] MovieUpdateRequest movie)
     {
-        if (movie == null)
-        {
-            return BadRequest();
-        }
-
-        await _repository.UpdateAsync(movie.Adapt<Movie>());
+        await _service.UpdateMovieAsync(movie);
 
         return Ok();
     }
 
-    [Route("delete-movie")]
+    [Route("id/{id}")]
     [HttpDelete]
-    public async Task<IActionResult> DeleteMovie(int id,CancellationToken token)
+    public async Task<IActionResult> DeleteMovie([FromRoute] int id, CancellationToken token)
     {
-        if (id == 0)
-        {
-            return BadRequest();
-        }
-
-        await _repository.DeleteAsync(id, token);
+        await _service.GetMovieByIdAsync(id, token);
 
         return Ok();
     }

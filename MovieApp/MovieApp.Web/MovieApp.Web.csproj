@@ -19,10 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Response\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MovieApp.Infastructure\MovieApp.Infastructure.csproj" />
   </ItemGroup>
 
