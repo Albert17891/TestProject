@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MovieApp.Core.Entities;
+using MovieApp.Core.Entities.MovieModels;
 using MovieApp.Core.Interfaces;
 using MovieApp.Infastructure.Data;
 
