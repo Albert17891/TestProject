@@ -1,0 +1,7 @@
+﻿namespace MovieApp.Core.Entities.MovieModels;
+public class MovieServiceModel
+{
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public DateTime CreatedDate { get; set; }
+}
