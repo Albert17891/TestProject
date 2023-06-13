@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MovieApp.Core.Entities.Movie;
+using MovieApp.Core.Entities.MovieModels;
 using MovieApp.Core.Interfaces.Services;
 
 namespace MovieApp.Web.Controllers;
@@ -36,26 +36,35 @@ public class MovieController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddMovie([FromBody] MovieRequest movie, CancellationToken token)
     {
-        await _service.AddMovieAsync(movie, token);
+        var result = await _service.AddMovieAsync(movie, token);
 
-        return Ok();
+        if (result)
+            return Ok();
+
+        return BadRequest();
     }
 
     [Route("update-movie")]
     [HttpPut]
     public async Task<IActionResult> UpdateMovie([FromBody] MovieUpdateRequest movie)
     {
-        await _service.UpdateMovieAsync(movie);
+        var result = await _service.UpdateMovieAsync(movie);
 
-        return Ok();
+        if (result)
+            return Ok();
+
+        return BadRequest();
     }
 
     [Route("id/{id}")]
     [HttpDelete]
     public async Task<IActionResult> DeleteMovie([FromRoute] int id, CancellationToken token)
     {
-        await _service.GetMovieByIdAsync(id, token);
+        var result = await _service.DeleteMovieAsync(id, token);
 
-        return Ok();
+        if (result)
+            return Ok();
+
+        return BadRequest();
     }
 }
