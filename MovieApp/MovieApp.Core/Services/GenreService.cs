@@ -1,7 +1,6 @@
 ﻿using Mapster;
 using Microsoft.EntityFrameworkCore;
 using MovieApp.Core.Entities.GenreModels;
-using MovieApp.Core.Entities.MovieModels;
 using MovieApp.Core.Interfaces;
 using MovieApp.Core.Interfaces.Services;
 
@@ -13,7 +12,7 @@ public class GenreService : IGenreService
 
     public GenreService(IBaseRepository<Genre> repository)
     {
-        _repository=repository;
+        _repository = repository;
     }
     public async Task<bool> AddGenreAsync(GenreRequest genreRequest, CancellationToken token)
     {
@@ -35,9 +34,9 @@ public class GenreService : IGenreService
 
     public async Task<IList<GenreServiceModel>> GetAllGenreAsync(CancellationToken token)
     {
-        var genre = await _repository.GetAllAsync(token);
+        var genres = await _repository.GetAllAsync(token);
 
-        return genre.Adapt<IList<GenreServiceModel>>();
+        return genres.Adapt<IList<GenreServiceModel>>();
     }
 
     public async Task<GenreServiceModel?> GetGenreByIdAsync(int id, CancellationToken token)

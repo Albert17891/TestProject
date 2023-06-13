@@ -1,5 +1,4 @@
 ﻿using MovieApp.Core.Entities.GenreModels;
-using MovieApp.Core.Entities.MovieModels;
 
 namespace MovieApp.Core.Interfaces.Services;
 
