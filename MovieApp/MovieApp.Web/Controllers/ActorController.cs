@@ -94,12 +94,7 @@ public class ActorController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500, result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 
     [Route("update-actor")]
@@ -123,12 +118,7 @@ public class ActorController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500, result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 
     [Route("id/{id}")]
@@ -152,11 +142,6 @@ public class ActorController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500, result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 }

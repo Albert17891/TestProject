@@ -36,12 +36,7 @@ public class GenreController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500, result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 
     [Route("get-all")]
@@ -65,12 +60,7 @@ public class GenreController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500, result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 
     [Route("add-genre")]
@@ -94,12 +84,7 @@ public class GenreController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500, result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 
     [Route("update-genre")]
@@ -123,12 +108,7 @@ public class GenreController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500, result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 
     [Route("id/{id}")]
@@ -152,11 +132,6 @@ public class GenreController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500, result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 }

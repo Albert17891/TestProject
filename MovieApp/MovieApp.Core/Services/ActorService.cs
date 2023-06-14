@@ -38,7 +38,8 @@ public class ActorService : IActorService
 
         return new Envelope<ActorServiceModel>
         {
-            Message = "Success"
+            Message = "Success",
+            Value = new ActorServiceModel()
         };
     }
 
@@ -77,7 +78,8 @@ public class ActorService : IActorService
 
         return new Envelope<ActorServiceModel>
         {
-            Message = "Success"
+            Message = "Success",
+            Value = new ActorServiceModel()
         };
     }
 
@@ -154,7 +156,8 @@ public class ActorService : IActorService
 
         return new Envelope<ActorServiceModel>
         {
-            Message = "Success"
+            Message = "Success",
+            Value = new ActorServiceModel()
         };
     }
 }

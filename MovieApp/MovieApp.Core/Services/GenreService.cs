@@ -38,7 +38,8 @@ public class GenreService : IGenreService
 
         return new Envelope<GenreServiceModel>
         {
-            Message = "Success"
+            Message = "Success",
+            Value = new GenreServiceModel()
         };
     }
 
@@ -77,7 +78,8 @@ public class GenreService : IGenreService
 
         return new Envelope<GenreServiceModel>
         {
-            Message = "Success"
+            Message = "Success",
+            Value= new GenreServiceModel()
         };
     }
 
@@ -154,7 +156,8 @@ public class GenreService : IGenreService
 
         return new Envelope<GenreServiceModel>
         {
-            Message = "Success"
+            Message = "Success",
+            Value= new MovieServiceModel()
         };
     }
 }

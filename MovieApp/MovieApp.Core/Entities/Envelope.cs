@@ -13,6 +13,5 @@ public enum EnvelopeStatusCode
     Success,
     NotFound,
     BadRequest,
-    InternalServerError,
-    UnknownError
+    InternalServerError    
 }

@@ -38,7 +38,8 @@ public class MovieService : IMovieService
 
         return new Envelope<MovieServiceModel>
         {
-            Message = "Success"
+            Message = "Success",
+            Value = new MovieServiceModel()
         };
     }
 
@@ -77,7 +78,8 @@ public class MovieService : IMovieService
 
         return new Envelope<MovieServiceModel>
         {
-            Message = "Success"
+            Message = "Success",
+            Value=new MovieServiceModel()
         };
     }
 
@@ -125,7 +127,7 @@ public class MovieService : IMovieService
 
         return new Envelope<MovieServiceModel>
         {
-            Value = movie?.Adapt<MovieServiceModel>(),
+            Value = movie.Adapt<MovieServiceModel>(),
             Message = "Success"
         };
     }
@@ -154,7 +156,8 @@ public class MovieService : IMovieService
 
         return new Envelope<MovieServiceModel>
         {
-            Message = "Success"
+            Message = "Success",
+            Value = new MovieServiceModel()
         };
     }
 }

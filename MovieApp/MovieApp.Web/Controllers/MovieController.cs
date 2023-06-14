@@ -37,12 +37,7 @@ public class MovieController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500, result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 
     [Route("get-all")]
@@ -66,12 +61,7 @@ public class MovieController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500, result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 
     [Route("add-movie")]
@@ -95,12 +85,7 @@ public class MovieController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500, result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 
     [Route("update-movie")]
@@ -124,12 +109,7 @@ public class MovieController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500,result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 
     [Route("id/{id}")]
@@ -153,11 +133,6 @@ public class MovieController : ControllerBase
             return BadRequest(result);
         }
 
-        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
-        {
-            return StatusCode(500, result.Message);
-        }
-
-        return BadRequest(result);
+        return StatusCode(500, result.Message);
     }
 }
