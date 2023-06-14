@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using Microsoft.EntityFrameworkCore;
 using MovieApp.Core.Entities.GenreModels;
+using MovieApp.Core.Exceptions;
 using MovieApp.Core.Interfaces;
 using MovieApp.Core.Interfaces.Services;
 
@@ -14,22 +15,28 @@ public class GenreService : IGenreService
     {
         _repository = repository;
     }
-    public async Task<bool> AddGenreAsync(GenreRequest genreRequest, CancellationToken token)
+    public async Task AddGenreAsync(GenreRequest genreRequest, CancellationToken token)
     {
         if (genreRequest == null)
             throw new ArgumentNullException(nameof(genreRequest));
 
-        return await _repository.AddAsync(genreRequest.Adapt<Genre>(), token);
+        var result = await _repository.AddAsync(genreRequest.Adapt<Genre>(), token);
+
+        if (!result)
+            throw new NotAffectedExceptions(nameof(result));
     }
 
-    public async Task<bool> DeleteGenreAsync(int id, CancellationToken token)
+    public async Task DeleteGenreAsync(int id, CancellationToken token)
     {
         var genre = await _repository.Table.FirstOrDefaultAsync(x => x.Id == id);
 
         if (genre == null)
-            throw new NullReferenceException();
+            throw new NullReferenceException(nameof(genre));
 
-        return await _repository.DeleteAsync(genre, token);
+        var result = await _repository.DeleteAsync(genre, token);
+
+        if (!result)
+            throw new NotAffectedExceptions(nameof(result));
     }
 
     public async Task<IList<GenreServiceModel>> GetAllGenreAsync(CancellationToken token)
@@ -46,11 +53,14 @@ public class GenreService : IGenreService
         return genre?.Adapt<GenreServiceModel>();
     }
 
-    public async Task<bool> UpdateGenreAsync(GenreUpdateRequest genre)
+    public async Task UpdateGenreAsync(GenreUpdateRequest genre)
     {
         if (genre == null)
             throw new NullReferenceException();
 
-        return await _repository.UpdateAsync(genre.Adapt<Genre>());
+        var result = await _repository.UpdateAsync(genre.Adapt<Genre>());
+
+        if (!result)
+            throw new NotAffectedExceptions(nameof(result));
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using Microsoft.EntityFrameworkCore;
 using MovieApp.Core.Entities.ActorModels;
+using MovieApp.Core.Exceptions;
 using MovieApp.Core.Interfaces;
 using MovieApp.Core.Interfaces.Services;
 
@@ -14,22 +15,28 @@ public class ActorService : IActorService
     {
         _repository = repository;
     }
-    public async Task<bool> AddActorAsync(ActorRequest actor, CancellationToken token)
+    public async Task AddActorAsync(ActorRequest actor, CancellationToken token)
     {
         if (actor == null)
             throw new ArgumentNullException(nameof(actor));
 
-        return await _repository.AddAsync(actor.Adapt<Actor>(), token);
+        var result = await _repository.AddAsync(actor.Adapt<Actor>(), token);
+
+        if (!result)
+            throw new NotAffectedExceptions(nameof(result));
     }
 
-    public async Task<bool> DeleteActorAsync(int id, CancellationToken token)
+    public async Task DeleteActorAsync(int id, CancellationToken token)
     {
         var actor = await _repository.Table.FirstOrDefaultAsync(x => x.Id == id);
 
         if (actor == null)
-            throw new NullReferenceException();
+            throw new NullReferenceException(nameof(actor));
 
-        return await _repository.DeleteAsync(actor, token);
+        var result = await _repository.DeleteAsync(actor, token);
+
+        if (!result)
+            throw new NotAffectedExceptions(nameof(result));
     }
 
     public async Task<IList<ActorServiceModel>> GetAllActorAsync(CancellationToken token)
@@ -46,11 +53,14 @@ public class ActorService : IActorService
         return actor?.Adapt<ActorServiceModel>();
     }
 
-    public async Task<bool> UpdateActorAsync(ActorUpdateRequest actor)
+    public async Task UpdateActorAsync(ActorUpdateRequest actor)
     {
         if (actor == null)
             throw new NullReferenceException();
 
-        return await _repository.UpdateAsync(actor.Adapt<Actor>());
+        var result = await _repository.UpdateAsync(actor.Adapt<Actor>());
+
+        if (!result)
+            throw new NotAffectedExceptions(nameof(result));
     }
 }

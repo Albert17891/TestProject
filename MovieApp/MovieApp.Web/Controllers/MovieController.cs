@@ -36,35 +36,26 @@ public class MovieController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddMovie([FromBody] MovieRequest movie, CancellationToken token)
     {
-        var result = await _service.AddMovieAsync(movie, token);
+        await _service.AddMovieAsync(movie, token);
 
-        if (result)
-            return Ok();
-
-        return BadRequest();
+        return Ok();
     }
 
     [Route("update-movie")]
     [HttpPut]
     public async Task<IActionResult> UpdateMovie([FromBody] MovieUpdateRequest movie)
     {
-        var result = await _service.UpdateMovieAsync(movie);
+        await _service.UpdateMovieAsync(movie);
 
-        if (result)
-            return Ok();
-
-        return BadRequest();
+        return Ok();
     }
 
     [Route("id/{id}")]
     [HttpDelete]
     public async Task<IActionResult> DeleteMovie([FromRoute] int id, CancellationToken token)
     {
-        var result = await _service.DeleteMovieAsync(id, token);
+        await _service.DeleteMovieAsync(id, token);
 
-        if (result)
-            return Ok();
-
-        return BadRequest();
+        return Ok();
     }
 }

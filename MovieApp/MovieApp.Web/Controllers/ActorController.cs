@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieApp.Core.Entities.ActorModels;
-using MovieApp.Core.Entities.MovieModels;
 using MovieApp.Core.Interfaces.Services;
 
 namespace MovieApp.Web.Controllers;
@@ -37,35 +36,26 @@ public class ActorController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddActor([FromBody] ActorRequest actor, CancellationToken token)
     {
-        var result = await _service.AddActorAsync(actor, token);
+        await _service.AddActorAsync(actor, token);
 
-        if (result)
-            return Ok();
-
-        return BadRequest();
+        return Ok();
     }
 
     [Route("update-actor")]
     [HttpPut]
     public async Task<IActionResult> UpdateActor([FromBody] ActorUpdateRequest actor)
     {
-        var result = await _service.UpdateActorAsync(actor);
+        await _service.UpdateActorAsync(actor);
 
-        if (result)
-            return Ok();
-
-        return BadRequest();
+        return Ok();
     }
 
     [Route("id/{id}")]
     [HttpDelete]
     public async Task<IActionResult> DeleteActor([FromRoute] int id, CancellationToken token)
     {
-        var result = await _service.DeleteActorAsync(id, token);
+        await _service.DeleteActorAsync(id, token);
 
-        if (result)
-            return Ok();
-
-        return BadRequest();
+        return Ok();
     }
 }

@@ -36,35 +36,26 @@ public class GenreController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddGenre([FromBody] GenreRequest genre, CancellationToken token)
     {
-        var result = await _service.AddGenreAsync(genre, token);
+        await _service.AddGenreAsync(genre, token);
 
-        if (result)
-            return Ok();
-
-        return BadRequest();
+        return Ok();
     }
 
     [Route("update-genre")]
     [HttpPut]
     public async Task<IActionResult> UpdateGenre([FromBody] GenreUpdateRequest genre)
     {
-        var result = await _service.UpdateGenreAsync(genre);
+        await _service.UpdateGenreAsync(genre);
 
-        if (result)
-            return Ok();
-
-        return BadRequest();
+        return Ok();
     }
 
     [Route("id/{id}")]
     [HttpDelete]
     public async Task<IActionResult> DeleteGenre([FromRoute] int id, CancellationToken token)
     {
-        var result = await _service.DeleteGenreAsync(id, token);
+        await _service.DeleteGenreAsync(id, token);
 
-        if (result)
-            return Ok();
-
-        return BadRequest();
+        return Ok();
     }
 }

@@ -6,7 +6,7 @@ public interface IGenreService
 {
     Task<GenreServiceModel?> GetGenreByIdAsync(int id, CancellationToken token);
     Task<IList<GenreServiceModel>> GetAllGenreAsync(CancellationToken token);
-    Task<bool> AddGenreAsync(GenreRequest genreRequest, CancellationToken token);
-    Task<bool> UpdateGenreAsync(GenreUpdateRequest genre);
-    Task<bool> DeleteGenreAsync(int id, CancellationToken token);
+    Task AddGenreAsync(GenreRequest genreRequest, CancellationToken token);
+    Task UpdateGenreAsync(GenreUpdateRequest genre);
+    Task DeleteGenreAsync(int id, CancellationToken token);
 }
