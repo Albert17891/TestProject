@@ -4,7 +4,7 @@ namespace MovieApp.Core.Interfaces.Services;
 
 public interface IActorService
 {
-    Task<ActorServiceModel?> GetActorByIdAsync(int id, CancellationToken token);
+    Task<Envelope<ActorServiceModel>> GetActorByIdAsync(int id, CancellationToken token);
     Task<IList<ActorServiceModel>> GetAllActorAsync(CancellationToken token);
     Task AddActorAsync(ActorRequest actor, CancellationToken token);
     Task UpdateActorAsync(ActorUpdateRequest actor);

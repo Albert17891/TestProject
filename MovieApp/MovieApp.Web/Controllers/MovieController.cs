@@ -3,6 +3,7 @@ using MovieApp.Core.Entities.MovieModels;
 using MovieApp.Core.Interfaces.Services;
 
 namespace MovieApp.Web.Controllers;
+
 [Route("[controller]")]
 [ApiController]
 public class MovieController : ControllerBase
