@@ -28,7 +28,7 @@ public class GenreController : ControllerBase
 
         if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
         {
-            return NotFound();
+            return NotFound(result);
         }
 
         if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
@@ -52,7 +52,7 @@ public class GenreController : ControllerBase
 
         if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
         {
-            return NotFound();
+            return NotFound(result);
         }
 
         if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
@@ -76,7 +76,7 @@ public class GenreController : ControllerBase
 
         if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
         {
-            return NotFound();
+            return NotFound(result);
         }
 
         if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
@@ -100,7 +100,7 @@ public class GenreController : ControllerBase
 
         if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
         {
-            return NotFound();
+            return NotFound(result);
         }
 
         if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
@@ -124,7 +124,7 @@ public class GenreController : ControllerBase
 
         if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
         {
-            return NotFound();
+            return NotFound(result);
         }
 
         if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
