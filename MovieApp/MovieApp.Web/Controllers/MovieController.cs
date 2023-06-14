@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MovieApp.Core.Entities;
 using MovieApp.Core.Entities.MovieModels;
 using MovieApp.Core.Interfaces.Services;
 
@@ -17,54 +18,146 @@ public class MovieController : ControllerBase
 
     [Route("id/{id}")]
     [HttpGet]
-    public async Task<IActionResult> GetMovieById([FromRoute] int id, CancellationToken token = default)
+    public async Task<IActionResult> GetMovieByIdAsync([FromRoute] int id, CancellationToken token = default)
     {
-        var movie = await _service.GetMovieByIdAsync(id, token);
+        var result = await _service.GetMovieByIdAsync(id, token);
 
-        if (movie.IsSuccess)
+        if (result.IsSuccess)
         {
-            return Ok(movie);
+            return Ok(result);
         }
 
-        if (movie.EnvelopeStatusCode == Core.Entities.EnvelopeStatusCode.NotFound)
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
         {
             return NotFound();
         }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 
     [Route("get-all")]
     [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken token = default)
+    public async Task<IActionResult> GetAllAsync(CancellationToken token = default)
     {
-        var movies = await _service.GetAllMovieAsync(token);
+        var result = await _service.GetAllMovieAsync(token);
 
-        return Ok(movies);
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 
     [Route("add-movie")]
     [HttpPost]
-    public async Task<IActionResult> AddMovie([FromBody] MovieRequest movie, CancellationToken token)
+    public async Task<IActionResult> AddMovieAsync([FromBody] MovieRequest movie, CancellationToken token)
     {
-        await _service.AddMovieAsync(movie, token);
+        var result = await _service.AddMovieAsync(movie, token);
 
-        return Ok();
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 
     [Route("update-movie")]
     [HttpPut]
-    public async Task<IActionResult> UpdateMovie([FromBody] MovieUpdateRequest movie)
+    public async Task<IActionResult> UpdateMovieAsync([FromBody] MovieUpdateRequest movie)
     {
-        await _service.UpdateMovieAsync(movie);
+        var result = await _service.UpdateMovieAsync(movie);
 
-        return Ok();
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500,result.Message);
+        }
+
+        return BadRequest(result);
     }
 
     [Route("id/{id}")]
     [HttpDelete]
-    public async Task<IActionResult> DeleteMovie([FromRoute] int id, CancellationToken token)
+    public async Task<IActionResult> DeleteMovieAsync([FromRoute] int id, CancellationToken token)
     {
-        await _service.DeleteMovieAsync(id, token);
+       var result= await _service.DeleteMovieAsync(id, token);
 
-        return Ok();
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MovieApp.Core.Entities;
 using MovieApp.Core.Entities.ActorModels;
 using MovieApp.Core.Interfaces.Services;
 
@@ -14,48 +15,148 @@ public class ActorController : ControllerBase
         _service = service;
     }
 
-    [Route("id{id}")]
+    [Route("id/{id}")]
     [HttpGet]
-    public async Task<IActionResult> GetActorById([FromRoute] int id, CancellationToken token = default)
+    public async Task<IActionResult> GetActorByIdAsync([FromRoute] int id, CancellationToken token = default)
     {
-        var movie = await _service.GetActorByIdAsync(id, token);
+        var result = await _service.GetActorByIdAsync(id, token);
 
-        return Ok(movie);
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 
     [Route("get-all")]
     [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken token = default)
+    public async Task<IActionResult> GetAllAsync(CancellationToken token = default)
     {
-        var movies = await _service.GetAllActorAsync(token);
+        var result = await _service.GetAllActorAsync(token);
 
-        return Ok(movies);
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 
     [Route("add-actor")]
     [HttpPost]
-    public async Task<IActionResult> AddActor([FromBody] ActorRequest actor, CancellationToken token)
+    public async Task<IActionResult> AddActorAsync([FromBody] ActorRequest actor, CancellationToken token)
     {
-        await _service.AddActorAsync(actor, token);
+        var result = await _service.AddActorAsync(actor, token);
 
-        return Ok();
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 
     [Route("update-actor")]
     [HttpPut]
-    public async Task<IActionResult> UpdateActor([FromBody] ActorUpdateRequest actor)
+    public async Task<IActionResult> UpdateActorAsync([FromBody] ActorUpdateRequest actor)
     {
-        await _service.UpdateActorAsync(actor);
+        var result = await _service.UpdateActorAsync(actor);
 
-        return Ok();
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 
     [Route("id/{id}")]
     [HttpDelete]
-    public async Task<IActionResult> DeleteActor([FromRoute] int id, CancellationToken token)
+    public async Task<IActionResult> DeleteActorAsync([FromRoute] int id, CancellationToken token)
     {
-        await _service.DeleteActorAsync(id, token);
+        var result = await _service.DeleteActorAsync(id, token);
 
-        return Ok();
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 }

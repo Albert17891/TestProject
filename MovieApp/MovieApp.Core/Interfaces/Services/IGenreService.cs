@@ -1,12 +1,13 @@
-﻿using MovieApp.Core.Entities.GenreModels;
+﻿using MovieApp.Core.Entities;
+using MovieApp.Core.Entities.GenreModels;
 
 namespace MovieApp.Core.Interfaces.Services;
 
 public interface IGenreService
 {
-    Task<GenreServiceModel?> GetGenreByIdAsync(int id, CancellationToken token);
-    Task<IList<GenreServiceModel>> GetAllGenreAsync(CancellationToken token);
-    Task AddGenreAsync(GenreRequest genreRequest, CancellationToken token);
-    Task UpdateGenreAsync(GenreUpdateRequest genre);
-    Task DeleteGenreAsync(int id, CancellationToken token);
+    Task<Envelope<GenreServiceModel>> GetGenreByIdAsync(int id, CancellationToken token);
+    Task<Envelope<IList<GenreServiceModel>>> GetAllGenreAsync(CancellationToken token);
+    Task<Envelope<GenreServiceModel>> AddGenreAsync(GenreRequest genreRequest, CancellationToken token);
+    Task<Envelope<GenreServiceModel>> UpdateGenreAsync(GenreUpdateRequest genre);
+    Task<Envelope<GenreServiceModel>> DeleteGenreAsync(int id, CancellationToken token);
 }

@@ -1,7 +1,6 @@
 ﻿using Mapster;
-using Microsoft.EntityFrameworkCore;
+using MovieApp.Core.Entities;
 using MovieApp.Core.Entities.ActorModels;
-using MovieApp.Core.Exceptions;
 using MovieApp.Core.Interfaces;
 using MovieApp.Core.Interfaces.Services;
 
@@ -9,58 +8,153 @@ namespace MovieApp.Core.Services;
 
 public class ActorService : IActorService
 {
-    private readonly IBaseRepository<Actor> _repository;
+    private readonly IActorRepository _repository;
 
-    public ActorService(IBaseRepository<Actor> repository)
+    public ActorService(IActorRepository repository)
     {
         _repository = repository;
     }
-    public async Task AddActorAsync(ActorRequest actor, CancellationToken token)
+    public async Task<Envelope<ActorServiceModel>> AddActorAsync(ActorRequest actor, CancellationToken token)
     {
         if (actor == null)
-            throw new ArgumentNullException(nameof(actor));
+        {
+            return new Envelope<ActorServiceModel>
+            {
+                Message = "Data is null",
+                EnvelopeStatusCode = EnvelopeStatusCode.BadRequest,
+            };
+        }
 
         var result = await _repository.AddAsync(actor.Adapt<Actor>(), token);
 
         if (!result)
-            throw new NotAffectedExceptions(nameof(result));
+        {
+            return new Envelope<ActorServiceModel>
+            {
+                Message = "Not added Data",
+                EnvelopeStatusCode = EnvelopeStatusCode.InternalServerError,
+            };
+        }
+
+        return new Envelope<ActorServiceModel>
+        {
+            Message = "Success"
+        };
     }
 
-    public async Task DeleteActorAsync(int id, CancellationToken token)
+    public async Task<Envelope<ActorServiceModel>> DeleteActorAsync(int id, CancellationToken token)
     {
-        var actor = await _repository.Table.FirstOrDefaultAsync(x => x.Id == id);
+        if (id <= 0)
+        {
+            return new Envelope<ActorServiceModel>
+            {
+                Message = "Id must be not less or equal zero",
+                EnvelopeStatusCode = EnvelopeStatusCode.BadRequest,
+            };
+        }
 
-        if (actor == null)
-            throw new NullReferenceException(nameof(actor));
+        var movie = await _repository.GetByIdAsync(id, token);
 
-        var result = await _repository.DeleteAsync(actor, token);
+        if (movie == null)
+        {
+            return new Envelope<ActorServiceModel>
+            {
+                Message = "Data not Found",
+                EnvelopeStatusCode = EnvelopeStatusCode.NotFound,
+            };
+        }
+
+        var result = await _repository.DeleteAsync(movie, token);
 
         if (!result)
-            throw new NotAffectedExceptions(nameof(result));
+        {
+            return new Envelope<ActorServiceModel>
+            {
+                Message = "Not deleted Data",
+                EnvelopeStatusCode = EnvelopeStatusCode.InternalServerError,
+            };
+        }
+
+        return new Envelope<ActorServiceModel>
+        {
+            Message = "Success"
+        };
     }
 
-    public async Task<IList<ActorServiceModel>> GetAllActorAsync(CancellationToken token)
+    public async Task<Envelope<IList<ActorServiceModel>>> GetAllActorAsync(CancellationToken token)
     {
         var actors = await _repository.GetAllAsync(token);
 
-        return actors.Adapt<IList<ActorServiceModel>>();
+        if (actors == null)
+        {
+            return new Envelope<IList<ActorServiceModel>>
+            {
+                Message = "Not Data Found",
+                EnvelopeStatusCode = EnvelopeStatusCode.NotFound
+            };
+        }
+
+        return new Envelope<IList<ActorServiceModel>>
+        {
+            Value = actors.Adapt<IList<ActorServiceModel>>(),
+            Message = "Success"
+        };
     }
 
-    public async Task<ActorServiceModel?> GetActorByIdAsync(int id, CancellationToken token)
+    public async Task<Envelope<ActorServiceModel>> GetActorByIdAsync(int id, CancellationToken token)
     {
-        var actor = await _repository.Table.FirstOrDefaultAsync(x => x.Id == id);
+        if (id <= 0)
+        {
+            return new Envelope<ActorServiceModel>
+            {
+                Message = "Id must be not less or equal zero",
+                EnvelopeStatusCode = EnvelopeStatusCode.BadRequest,
+            };
+        }
 
-        return actor?.Adapt<ActorServiceModel>();
+        var actor = await _repository.GetByIdAsync(id, token);
+
+        if (actor == null)
+        {
+            return new Envelope<ActorServiceModel>
+            {
+                Message = "Actor Not Found",
+                EnvelopeStatusCode = EnvelopeStatusCode.NotFound,
+            };
+        }
+
+        return new Envelope<ActorServiceModel>
+        {
+            Value = actor.Adapt<ActorServiceModel>(),
+            Message = "Success"
+        };
     }
 
-    public async Task UpdateActorAsync(ActorUpdateRequest actor)
+    public async Task<Envelope<ActorServiceModel>> UpdateActorAsync(ActorUpdateRequest actor)
     {
         if (actor == null)
-            throw new NullReferenceException();
+        {
+            return new Envelope<ActorServiceModel>
+            {
+                Message = "Data is null",
+                EnvelopeStatusCode = EnvelopeStatusCode.BadRequest,
+            };
+        }
 
         var result = await _repository.UpdateAsync(actor.Adapt<Actor>());
 
         if (!result)
-            throw new NotAffectedExceptions(nameof(result));
+        {
+            return new Envelope<ActorServiceModel>
+            {
+                Message = "Not updated Data",
+                EnvelopeStatusCode = EnvelopeStatusCode.InternalServerError,
+            };
+        }
+
+        return new Envelope<ActorServiceModel>
+        {
+            Message = "Success"
+        };
     }
 }

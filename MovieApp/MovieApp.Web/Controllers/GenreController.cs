@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MovieApp.Core.Entities;
 using MovieApp.Core.Entities.GenreModels;
 using MovieApp.Core.Interfaces.Services;
 
@@ -14,48 +15,148 @@ public class GenreController : ControllerBase
         _service = service;
     }
 
-    [Route("id{id}")]
+    [Route("id/{id}")]
     [HttpGet]
-    public async Task<IActionResult> GetGenreById([FromRoute] int id, CancellationToken token = default)
+    public async Task<IActionResult> GetGenreByIdAsync([FromRoute] int id, CancellationToken token = default)
     {
-        var genre = await _service.GetGenreByIdAsync(id, token);
+        var result = await _service.GetGenreByIdAsync(id, token);
 
-        return Ok(genre);
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 
     [Route("get-all")]
     [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken token = default)
+    public async Task<IActionResult> GetAllAsync(CancellationToken token = default)
     {
-        var genres = await _service.GetAllGenreAsync(token);
+        var result = await _service.GetAllGenreAsync(token);
 
-        return Ok(genres);
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 
     [Route("add-genre")]
     [HttpPost]
-    public async Task<IActionResult> AddGenre([FromBody] GenreRequest genre, CancellationToken token)
+    public async Task<IActionResult> AddGenreAsync([FromBody] GenreRequest genre, CancellationToken token)
     {
-        await _service.AddGenreAsync(genre, token);
+        var result = await _service.AddGenreAsync(genre, token);
 
-        return Ok();
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 
     [Route("update-genre")]
     [HttpPut]
-    public async Task<IActionResult> UpdateGenre([FromBody] GenreUpdateRequest genre)
+    public async Task<IActionResult> UpdateGenreAsync([FromBody] GenreUpdateRequest genre)
     {
-        await _service.UpdateGenreAsync(genre);
+        var result = await _service.UpdateGenreAsync(genre);
 
-        return Ok();
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 
     [Route("id/{id}")]
     [HttpDelete]
-    public async Task<IActionResult> DeleteGenre([FromRoute] int id, CancellationToken token)
+    public async Task<IActionResult> DeleteGenreAsync([FromRoute] int id, CancellationToken token)
     {
-        await _service.DeleteGenreAsync(id, token);
+        var result = await _service.DeleteGenreAsync(id, token);
 
-        return Ok();
+        if (result.IsSuccess)
+        {
+            return Ok(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.BadRequest)
+        {
+            return BadRequest(result);
+        }
+
+        if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
+        {
+            return StatusCode(500, result.Message);
+        }
+
+        return BadRequest(result);
     }
 }

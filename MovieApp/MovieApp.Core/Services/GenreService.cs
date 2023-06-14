@@ -1,7 +1,6 @@
 ﻿using Mapster;
-using Microsoft.EntityFrameworkCore;
+using MovieApp.Core.Entities;
 using MovieApp.Core.Entities.GenreModels;
-using MovieApp.Core.Exceptions;
 using MovieApp.Core.Interfaces;
 using MovieApp.Core.Interfaces.Services;
 
@@ -9,58 +8,153 @@ namespace MovieApp.Core.Services;
 
 public class GenreService : IGenreService
 {
-    private readonly IBaseRepository<Genre> _repository;
+    private readonly IGenreRepository _repository;
 
-    public GenreService(IBaseRepository<Genre> repository)
+    public GenreService(IGenreRepository repository)
     {
         _repository = repository;
     }
-    public async Task AddGenreAsync(GenreRequest genreRequest, CancellationToken token)
+    public async Task<Envelope<GenreServiceModel>> AddGenreAsync(GenreRequest genreRequest, CancellationToken token)
     {
         if (genreRequest == null)
-            throw new ArgumentNullException(nameof(genreRequest));
+        {
+            return new Envelope<GenreServiceModel>
+            {
+                Message = "Data is null",
+                EnvelopeStatusCode = EnvelopeStatusCode.BadRequest,
+            };
+        }
 
         var result = await _repository.AddAsync(genreRequest.Adapt<Genre>(), token);
 
         if (!result)
-            throw new NotAffectedExceptions(nameof(result));
+        {
+            return new Envelope<GenreServiceModel>
+            {
+                Message = "Not added Data",
+                EnvelopeStatusCode = EnvelopeStatusCode.InternalServerError,
+            };
+        }
+
+        return new Envelope<GenreServiceModel>
+        {
+            Message = "Success"
+        };
     }
 
-    public async Task DeleteGenreAsync(int id, CancellationToken token)
+    public async Task<Envelope<GenreServiceModel>> DeleteGenreAsync(int id, CancellationToken token)
     {
-        var genre = await _repository.Table.FirstOrDefaultAsync(x => x.Id == id);
+        if (id <= 0)
+        {
+            return new Envelope<GenreServiceModel>
+            {
+                Message = "Id must be not less or equal zero",
+                EnvelopeStatusCode = EnvelopeStatusCode.BadRequest,
+            };
+        }
 
-        if (genre == null)
-            throw new NullReferenceException(nameof(genre));
+        var movie = await _repository.GetByIdAsync(id, token);
 
-        var result = await _repository.DeleteAsync(genre, token);
+        if (movie == null)
+        {
+            return new Envelope<GenreServiceModel>
+            {
+                Message = "Data not Found",
+                EnvelopeStatusCode = EnvelopeStatusCode.NotFound,
+            };
+        }
+
+        var result = await _repository.DeleteAsync(movie, token);
 
         if (!result)
-            throw new NotAffectedExceptions(nameof(result));
+        {
+            return new Envelope<GenreServiceModel>
+            {
+                Message = "Not deleted Data",
+                EnvelopeStatusCode = EnvelopeStatusCode.InternalServerError,
+            };
+        }
+
+        return new Envelope<GenreServiceModel>
+        {
+            Message = "Success"
+        };
     }
 
-    public async Task<IList<GenreServiceModel>> GetAllGenreAsync(CancellationToken token)
+    public async Task<Envelope<IList<GenreServiceModel>>> GetAllGenreAsync(CancellationToken token)
     {
         var genres = await _repository.GetAllAsync(token);
 
-        return genres.Adapt<IList<GenreServiceModel>>();
+        if (genres == null)
+        {
+            return new Envelope<IList<GenreServiceModel>>
+            {
+                Message = "Not Data Found",
+                EnvelopeStatusCode = EnvelopeStatusCode.NotFound
+            };
+        }
+
+        return new Envelope<IList<GenreServiceModel>>
+        {
+            Value = genres.Adapt<IList<GenreServiceModel>>(),
+            Message = "Success"
+        };
     }
 
-    public async Task<GenreServiceModel?> GetGenreByIdAsync(int id, CancellationToken token)
+    public async Task<Envelope<GenreServiceModel>> GetGenreByIdAsync(int id, CancellationToken token)
     {
-        var genre = await _repository.Table.FirstOrDefaultAsync(x => x.Id == id);
+        if (id <= 0)
+        {
+            return new Envelope<GenreServiceModel>
+            {
+                Message = "Id must be not less or equal zero",
+                EnvelopeStatusCode = EnvelopeStatusCode.BadRequest,
+            };
+        }
 
-        return genre?.Adapt<GenreServiceModel>();
+        var genre = await _repository.GetByIdAsync(id, token);
+
+        if (genre == null)
+        {
+            return new Envelope<GenreServiceModel>
+            {
+                Message = "Genre Not Found",
+                EnvelopeStatusCode = EnvelopeStatusCode.NotFound,
+            };
+        }
+
+        return new Envelope<GenreServiceModel>
+        {
+            Value = genre?.Adapt<GenreServiceModel>(),
+            Message = "Success"
+        };
     }
 
-    public async Task UpdateGenreAsync(GenreUpdateRequest genre)
+    public async Task<Envelope<GenreServiceModel>> UpdateGenreAsync(GenreUpdateRequest genre)
     {
         if (genre == null)
-            throw new NullReferenceException();
+        {
+            return new Envelope<GenreServiceModel>
+            {
+                Message = "Data is null",
+                EnvelopeStatusCode = EnvelopeStatusCode.BadRequest,
+            };
+        }
 
         var result = await _repository.UpdateAsync(genre.Adapt<Genre>());
 
         if (!result)
-            throw new NotAffectedExceptions(nameof(result));
+        {
+            return new Envelope<GenreServiceModel>
+            {
+                Message = "Not updated Data",
+                EnvelopeStatusCode = EnvelopeStatusCode.InternalServerError,
+            };
+        }
+
+        return new Envelope<GenreServiceModel>
+        {
+            Message = "Success"
+        };
     }
 }

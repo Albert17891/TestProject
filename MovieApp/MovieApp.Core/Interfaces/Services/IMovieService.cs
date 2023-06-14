@@ -5,8 +5,8 @@ namespace MovieApp.Core.Interfaces.Services;
 public interface IMovieService
 {
     Task<Envelope<MovieServiceModel>> GetMovieByIdAsync(int id, CancellationToken token);
-    Task<IList<MovieServiceModel>> GetAllMovieAsync(CancellationToken token);
-    Task AddMovieAsync(MovieRequest movie, CancellationToken token);
-    Task UpdateMovieAsync(MovieUpdateRequest movie);
-    Task DeleteMovieAsync(int id, CancellationToken token);
+    Task<Envelope<IList<MovieServiceModel>>> GetAllMovieAsync(CancellationToken token);
+    Task<Envelope<MovieServiceModel>> AddMovieAsync(MovieRequest movie, CancellationToken token);
+    Task<Envelope<MovieServiceModel>> UpdateMovieAsync(MovieUpdateRequest movie);
+    Task<Envelope<MovieServiceModel>> DeleteMovieAsync(int id, CancellationToken token);
 }

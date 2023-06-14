@@ -1,8 +1,6 @@
 ﻿using Mapster;
-using Microsoft.EntityFrameworkCore;
 using MovieApp.Core.Entities;
 using MovieApp.Core.Entities.MovieModels;
-using MovieApp.Core.Exceptions;
 using MovieApp.Core.Interfaces;
 using MovieApp.Core.Interfaces.Services;
 
@@ -10,70 +8,153 @@ namespace MovieApp.Core.Services;
 
 public class MovieService : IMovieService
 {
-    private readonly IBaseRepository<Movie> _repository;
+    private readonly IMovieRepository _repository;
 
-    public MovieService(IBaseRepository<Movie> repository)
+    public MovieService(IMovieRepository repository)
     {
         _repository = repository;
     }
-    public async Task AddMovieAsync(MovieRequest movie, CancellationToken token)
+    public async Task<Envelope<MovieServiceModel>> AddMovieAsync(MovieRequest movie, CancellationToken token)
     {
         if (movie == null)
-            throw new ArgumentNullException(nameof(movie));
+        {
+            return new Envelope<MovieServiceModel>
+            {
+                Message = "Data is null",
+                EnvelopeStatusCode = EnvelopeStatusCode.BadRequest,
+            };
+        }
 
         var result = await _repository.AddAsync(movie.Adapt<Movie>(), token);
 
         if (!result)
-            throw new NotAffectedExceptions(nameof(result));
+        {
+            return new Envelope<MovieServiceModel>
+            {
+                Message = "Not added Data",
+                EnvelopeStatusCode = EnvelopeStatusCode.InternalServerError,
+            };
+        }
+
+        return new Envelope<MovieServiceModel>
+        {
+            Message = "Success"
+        };
     }
 
-    public async Task DeleteMovieAsync(int id, CancellationToken token)
+    public async Task<Envelope<MovieServiceModel>> DeleteMovieAsync(int id, CancellationToken token)
     {
-        var movie = await _repository.Table.FirstOrDefaultAsync(x => x.Id == id);
+        if (id <= 0)
+        {
+            return new Envelope<MovieServiceModel>
+            {
+                Message = "Id must be not less or equal zero",
+                EnvelopeStatusCode = EnvelopeStatusCode.BadRequest,
+            };
+        }
+
+        var movie = await _repository.GetByIdAsync(id, token);
 
         if (movie == null)
-            throw new NullReferenceException(nameof(movie));
+        {
+            return new Envelope<MovieServiceModel>
+            {
+                Message = "Data not Found",
+                EnvelopeStatusCode = EnvelopeStatusCode.NotFound,
+            };
+        }
 
         var result = await _repository.DeleteAsync(movie, token);
 
         if (!result)
-            throw new NotAffectedExceptions(nameof(result));
+        {
+            return new Envelope<MovieServiceModel>
+            {
+                Message = "Not deleted Data",
+                EnvelopeStatusCode = EnvelopeStatusCode.InternalServerError,
+            };
+        }
+
+        return new Envelope<MovieServiceModel>
+        {
+            Message = "Success"
+        };
     }
 
-    public async Task<IList<MovieServiceModel>> GetAllMovieAsync(CancellationToken token)
+    public async Task<Envelope<IList<MovieServiceModel>>> GetAllMovieAsync(CancellationToken token)
     {
         var movies = await _repository.GetAllAsync(token);
 
-        return movies.Adapt<IList<MovieServiceModel>>();
+        if (movies == null)
+        {
+            return new Envelope<IList<MovieServiceModel>>
+            {
+                Message = "Not Data Found",
+                EnvelopeStatusCode = EnvelopeStatusCode.NotFound
+            };
+        }
+
+        return new Envelope<IList<MovieServiceModel>>
+        {
+            Value = movies.Adapt<IList<MovieServiceModel>>(),
+            Message = "Success"
+        };
     }
 
     public async Task<Envelope<MovieServiceModel>> GetMovieByIdAsync(int id, CancellationToken token)
     {
-        var movie = await _repository.Table.FirstOrDefaultAsync(x => x.Id == id);
+        if (id <= 0)
+        {
+            return new Envelope<MovieServiceModel>
+            {
+                Message = "Id must be not less or equal zero",
+                EnvelopeStatusCode = EnvelopeStatusCode.BadRequest,
+            };
+        }
+
+        var movie = await _repository.GetByIdAsync(id, token);
 
         if (movie == null)
         {
             return new Envelope<MovieServiceModel>
             {
                 Message = "Movie Not Found",
-                EnvelopeStatusCode=EnvelopeStatusCode.NotFound,
+                EnvelopeStatusCode = EnvelopeStatusCode.NotFound,
             };
         }
 
         return new Envelope<MovieServiceModel>
         {
             Value = movie?.Adapt<MovieServiceModel>(),
+            Message = "Success"
         };
     }
 
-    public async Task UpdateMovieAsync(MovieUpdateRequest movie)
+    public async Task<Envelope<MovieServiceModel>> UpdateMovieAsync(MovieUpdateRequest movie)
     {
         if (movie == null)
-            throw new NullReferenceException();
+        {
+            return new Envelope<MovieServiceModel>
+            {
+                Message = "Data is null",
+                EnvelopeStatusCode = EnvelopeStatusCode.BadRequest,
+            };
+        }
 
         var result = await _repository.UpdateAsync(movie.Adapt<Movie>());
 
         if (!result)
-            throw new NotAffectedExceptions(nameof(result));
+        {
+            return new Envelope<MovieServiceModel>
+            {
+                Message = "Not updated Data",
+                EnvelopeStatusCode = EnvelopeStatusCode.InternalServerError,
+            };
+        }
+
+        return new Envelope<MovieServiceModel>
+        {
+            Message = "Success"
+        };
     }
 }
