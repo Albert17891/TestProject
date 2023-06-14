@@ -157,7 +157,7 @@ public class GenreService : IGenreService
         return new Envelope<GenreServiceModel>
         {
             Message = "Success",
-            Value= new MovieServiceModel()
+            Value= new GenreServiceModel()
         };
     }
 }

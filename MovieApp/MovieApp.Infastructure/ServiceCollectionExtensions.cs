@@ -15,6 +15,11 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
+        services.AddScoped<IMovieRepository, MovieRepository>();
+        services.AddScoped<IGenreRepository,GenreRepository>();
+        services.AddScoped<IActorRepository, ActorRepository>();    
+
         services.AddScoped<IMovieService, MovieService>();
         services.AddScoped<IGenreService, GenreService>();
         services.AddScoped<IActorService, ActorService>();
