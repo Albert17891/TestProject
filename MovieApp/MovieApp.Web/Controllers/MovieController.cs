@@ -2,6 +2,7 @@
 using MovieApp.Core.Entities;
 using MovieApp.Core.Entities.MovieModels;
 using MovieApp.Core.Interfaces.Services;
+using System.Net;
 
 namespace MovieApp.Web.Controllers;
 
@@ -37,7 +38,7 @@ public class MovieController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 
     [Route("get-all")]
@@ -61,7 +62,7 @@ public class MovieController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 
     [Route("add-movie")]
@@ -85,7 +86,7 @@ public class MovieController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 
     [Route("update-movie")]
@@ -109,7 +110,7 @@ public class MovieController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 
     [Route("id/{id}")]
@@ -133,6 +134,6 @@ public class MovieController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 }

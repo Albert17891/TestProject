@@ -2,6 +2,7 @@
 using MovieApp.Core.Entities;
 using MovieApp.Core.Entities.GenreModels;
 using MovieApp.Core.Interfaces.Services;
+using System.Net;
 
 namespace MovieApp.Web.Controllers;
 [Route("[controller]")]
@@ -36,7 +37,7 @@ public class GenreController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 
     [Route("get-all")]
@@ -60,7 +61,7 @@ public class GenreController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 
     [Route("add-genre")]
@@ -84,7 +85,7 @@ public class GenreController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 
     [Route("update-genre")]
@@ -108,7 +109,7 @@ public class GenreController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 
     [Route("id/{id}")]
@@ -132,6 +133,6 @@ public class GenreController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 }

@@ -2,6 +2,7 @@
 using MovieApp.Core.Entities;
 using MovieApp.Core.Entities.ActorModels;
 using MovieApp.Core.Interfaces.Services;
+using System.Net;
 
 namespace MovieApp.Web.Controllers;
 [Route("[controller]")]
@@ -38,7 +39,7 @@ public class ActorController : ControllerBase
 
         if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
         {
-            return StatusCode(500, result.Message);
+            return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
         }
 
         return BadRequest(result);
@@ -67,7 +68,7 @@ public class ActorController : ControllerBase
 
         if (result.EnvelopeStatusCode == EnvelopeStatusCode.InternalServerError)
         {
-            return StatusCode(500, result.Message);
+            return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
         }
 
         return BadRequest(result);
@@ -94,7 +95,7 @@ public class ActorController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 
     [Route("update-actor")]
@@ -118,7 +119,7 @@ public class ActorController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 
     [Route("id/{id}")]
@@ -142,6 +143,6 @@ public class ActorController : ControllerBase
             return BadRequest(result);
         }
 
-        return StatusCode(500, result.Message);
+        return StatusCode((int)HttpStatusCode.InternalServerError, result.Message);
     }
 }
