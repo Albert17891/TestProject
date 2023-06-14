@@ -39,7 +39,7 @@ public class GenreService : IGenreService
         return new Envelope<GenreServiceModel>
         {
             Message = "Success",
-            Value = new GenreServiceModel()
+            Value = genreRequest.Adapt<GenreServiceModel>(),
         };
     }
 
@@ -54,9 +54,9 @@ public class GenreService : IGenreService
             };
         }
 
-        var movie = await _repository.GetByIdAsync(id, token);
+        var genre = await _repository.GetByIdAsync(id, token);
 
-        if (movie == null)
+        if (genre == null)
         {
             return new Envelope<GenreServiceModel>
             {
@@ -65,7 +65,7 @@ public class GenreService : IGenreService
             };
         }
 
-        var result = await _repository.DeleteAsync(movie, token);
+        var result = await _repository.DeleteAsync(genre, token);
 
         if (!result)
         {
@@ -79,7 +79,7 @@ public class GenreService : IGenreService
         return new Envelope<GenreServiceModel>
         {
             Message = "Success",
-            Value= new GenreServiceModel()
+            Value = genre.Adapt<GenreServiceModel>(),
         };
     }
 
@@ -157,7 +157,7 @@ public class GenreService : IGenreService
         return new Envelope<GenreServiceModel>
         {
             Message = "Success",
-            Value= new GenreServiceModel()
+            Value = genre.Adapt<GenreServiceModel>(),
         };
     }
 }

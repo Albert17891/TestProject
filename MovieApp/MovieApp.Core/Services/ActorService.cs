@@ -39,7 +39,7 @@ public class ActorService : IActorService
         return new Envelope<ActorServiceModel>
         {
             Message = "Success",
-            Value = new ActorServiceModel()
+            Value = actor.Adapt<ActorServiceModel>()
         };
     }
 
@@ -54,9 +54,9 @@ public class ActorService : IActorService
             };
         }
 
-        var movie = await _repository.GetByIdAsync(id, token);
+        var actor = await _repository.GetByIdAsync(id, token);
 
-        if (movie == null)
+        if (actor == null)
         {
             return new Envelope<ActorServiceModel>
             {
@@ -65,7 +65,7 @@ public class ActorService : IActorService
             };
         }
 
-        var result = await _repository.DeleteAsync(movie, token);
+        var result = await _repository.DeleteAsync(actor, token);
 
         if (!result)
         {
@@ -79,7 +79,7 @@ public class ActorService : IActorService
         return new Envelope<ActorServiceModel>
         {
             Message = "Success",
-            Value = new ActorServiceModel()
+            Value = actor.Adapt<ActorServiceModel>()
         };
     }
 
@@ -157,7 +157,7 @@ public class ActorService : IActorService
         return new Envelope<ActorServiceModel>
         {
             Message = "Success",
-            Value = new ActorServiceModel()
+            Value = actor.Adapt<ActorServiceModel>(),
         };
     }
 }
