@@ -1,0 +1,18 @@
+﻿namespace MovieApp.Core.Entities;
+
+public class Envelope<T>
+{
+    public T Value { get; set; }
+    public string Message { get; set; } 
+    public bool IsSuccess { get { return Value != null; } }  
+    public EnvelopeStatusCode EnvelopeStatusCode { get; set; }  
+}
+
+public enum EnvelopeStatusCode
+{
+    Success,
+    NotFound,
+    BadRequest,
+    InternalServerError,
+    UnknownError
+}

@@ -14,13 +14,21 @@ public class MovieController : ControllerBase
         _service = service;
     }
 
-    [Route("id{id}")]
+    [Route("id/{id}")]
     [HttpGet]
     public async Task<IActionResult> GetMovieById([FromRoute] int id, CancellationToken token = default)
     {
         var movie = await _service.GetMovieByIdAsync(id, token);
 
-        return Ok(movie);
+        if (movie.IsSuccess)
+        {
+            return Ok(movie);
+        }
+
+        if (movie.EnvelopeStatusCode == Core.Entities.EnvelopeStatusCode.NotFound)
+        {
+            return NotFound();
+        }
     }
 
     [Route("get-all")]

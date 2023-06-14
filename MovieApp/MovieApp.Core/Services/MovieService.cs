@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using Microsoft.EntityFrameworkCore;
+using MovieApp.Core.Entities;
 using MovieApp.Core.Entities.MovieModels;
 using MovieApp.Core.Exceptions;
 using MovieApp.Core.Interfaces;
@@ -46,11 +47,23 @@ public class MovieService : IMovieService
         return movies.Adapt<IList<MovieServiceModel>>();
     }
 
-    public async Task<MovieServiceModel?> GetMovieByIdAsync(int id, CancellationToken token)
+    public async Task<Envelope<MovieServiceModel>> GetMovieByIdAsync(int id, CancellationToken token)
     {
         var movie = await _repository.Table.FirstOrDefaultAsync(x => x.Id == id);
 
-        return movie?.Adapt<MovieServiceModel>();
+        if (movie == null)
+        {
+            return new Envelope<MovieServiceModel>
+            {
+                Message = "Movie Not Found",
+                EnvelopeStatusCode=EnvelopeStatusCode.NotFound,
+            };
+        }
+
+        return new Envelope<MovieServiceModel>
+        {
+            Value = movie?.Adapt<MovieServiceModel>(),
+        };
     }
 
     public async Task UpdateMovieAsync(MovieUpdateRequest movie)
